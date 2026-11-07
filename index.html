@@ -972,7 +972,8 @@ renderFilters(); renderTiles(); render();
   if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
   const btn = document.getElementById("installBtn"), card = document.getElementById("installCard"), steps = document.getElementById("installSteps");
   const standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
-  if (standalone && btn) btn.style.display = "none";
+  function collapseBar(){ if (btn) btn.style.display = "none"; const g = btn && btn.parentElement; if (g) g.style.gridTemplateColumns = "repeat(3,1fr)"; }
+  if (standalone) collapseBar();
   let deferred = null;
   addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; setTimeout(() => considerNudge(0), 20000); });
   const nudge = document.getElementById("installNudge");
@@ -994,7 +995,7 @@ renderFilters(); renderTiles(); render();
     return true;
   }
   document.addEventListener("click", e => { if (e.target.closest && e.target.closest(".card,[data-seemore]")) setTimeout(() => considerNudge(0), 4000); });
-  addEventListener("appinstalled", () => { hideNudge(); if (btn) btn.style.display = "none"; });
+  addEventListener("appinstalled", () => { hideNudge(); collapseBar(); });
   function showSteps(html){ steps.innerHTML = html; card.classList.remove("hidden"); }
   if (btn) btn.addEventListener("click", async () => {
     if (await runPrompt()) return;
