@@ -886,10 +886,11 @@ document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 /* ——— Age gate ——— */
 (function(){
   const gate = document.getElementById("ageGate");
-  if(sessionStorage.getItem("cushAgeOK")==="1"){ gate.style.display = "none"; return; }
+  let ageOK = false; try { ageOK = sessionStorage.getItem("cushAgeOK")==="1"; } catch(e) {}
+  if(ageOK){ gate.style.display = "none"; return; }
   document.body.style.overflow = "hidden";
   document.getElementById("ageYes").addEventListener("click", () => {
-    sessionStorage.setItem("cushAgeOK","1");
+    try { sessionStorage.setItem("cushAgeOK","1"); } catch(e) {}
     gate.style.opacity = "0";
     setTimeout(() => { gate.style.display = "none"; document.body.style.overflow = ""; }, 450);
   });
