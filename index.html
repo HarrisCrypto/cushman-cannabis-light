@@ -158,7 +158,12 @@ tailwind.config = { theme: { extend: {
 
 <!-- ══════════ HERO — THE ROLLING HILLS, ENGRAVED PLATE ══════════ -->
 <section id="top" class="relative overflow-hidden" style="background:linear-gradient(180deg,#faf5e4 0%,#f6f0da 60%,#eef0da 100%)">
-  <div class="relative max-w-7xl mx-auto px-5 md:px-8 pt-12 md:pt-16 grid lg:grid-cols-[1.12fr_.88fr] gap-10 items-center z-10">
+  <div class="absolute inset-0" aria-hidden="true">
+    <img src="hero-etching-a.webp" alt="" class="w-full h-full object-cover" style="object-position:50% 40%">
+    <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(246,241,227,.96) 0%,rgba(246,241,227,.86) 34%,rgba(246,241,227,.22) 62%,rgba(246,241,227,0) 82%)"></div>
+    <div class="absolute inset-x-0 bottom-0 h-28" style="background:linear-gradient(0deg,#efe9d2,rgba(239,233,210,0))"></div>
+  </div>
+  <div class="relative max-w-7xl mx-auto px-5 md:px-8 pt-12 md:pt-16 pb-48 md:pb-64 grid lg:grid-cols-[1.12fr_.88fr] gap-10 items-center z-10">
     <div class="reveal">
       <div class="flex items-center gap-3 mb-4">
         <span class="h-px w-10" style="background:#b3862c"></span>
@@ -182,14 +187,6 @@ tailwind.config = { theme: { extend: {
     </div>
   </div>
 
-  <div class="relative max-w-7xl mx-auto px-5 md:px-8 mt-10 md:mt-12 pb-12 md:pb-16 reveal">
-    <figure>
-      <div class="relative overflow-hidden" style="border:1.5px solid rgba(46,82,51,.6);border-radius:4px;box-shadow:0 0 0 5px #f6f1e3,0 0 0 6.5px rgba(179,134,44,.65),0 34px 54px -30px rgba(32,48,30,.4)">
-        <img src="hero-etching-a.webp" alt="Etching-style illustration of rolling Oklahoma hills at sunrise, with a fence line and wind-bent trees" class="w-full block object-cover aspect-[2/1] md:aspect-auto" style="object-position:44% 50%">
-      </div>
-      <figcaption class="text-center mt-4 text-[.62rem] font-semibold uppercase" style="letter-spacing:.34em;color:rgba(46,82,51,.66)">The rolling hills of Cushing, Oklahoma</figcaption>
-    </figure>
-  </div>
 </section>
 
 <!-- ══════════ MARQUEE ══════════ -->
