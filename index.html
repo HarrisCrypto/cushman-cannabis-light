@@ -80,8 +80,8 @@ tailwind.config = { theme: { extend: {
     @keyframes windDrift{to{stroke-dashoffset:-330}}
   }
   /* ——— Bottom action bar ——— */
-  #actionBar{position:fixed;inset-inline:0;bottom:0;z-index:75;transform:translateY(110%);transition:transform .9s cubic-bezier(.16,1,.3,1)}
-  #actionBar.show{transform:none}
+  #actionBar{position:fixed;inset-inline:0;bottom:0;z-index:75;transform:translateY(110%) translateZ(0);-webkit-transform:translateY(110%) translateZ(0);transition:transform .45s cubic-bezier(.16,1,.3,1);will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+  #actionBar.show{transform:translateY(0) translateZ(0);-webkit-transform:translateY(0) translateZ(0)}
   .bar-link{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px calc(10px + env(safe-area-inset-bottom));font-size:.64rem;letter-spacing:.16em;color:#41523c;transition:.25s}
   .bar-link:hover{color:#2e5233}
   .bar-link svg{color:#b3862c}
@@ -937,7 +937,7 @@ renderFilters(); renderTiles(); render();
   function onScroll(){
     const y = window.scrollY || 0, open = panel.classList.contains("open");
     wrap.classList.toggle("on", open || y > 250);
-    document.getElementById("actionBar").classList.toggle("show", y > 420 && !open);
+    const ab = document.getElementById("actionBar"); const want = y > 420 && !open; if (ab.classList.contains("show") !== want) ab.classList.toggle("show", want);
     wrap.classList.toggle("bar-up", y > 420 && !open);
   }
   window.addEventListener("scroll", onScroll, {passive:true});
@@ -996,7 +996,7 @@ renderFilters(); renderTiles(); render();
   }
   document.addEventListener("click", e => { if (e.target.closest && e.target.closest(".card,[data-seemore]")) setTimeout(() => considerNudge(0), 4000); });
   addEventListener("appinstalled", () => { hideNudge(); collapseBar(); });
-  const APP_VERSION = "20261107-0205";
+  const APP_VERSION = "20261107-0212";
   async function checkFresh(){
     try {
       if (navigator.serviceWorker) { const reg = await navigator.serviceWorker.getRegistration(); if (reg) reg.update().catch(() => {}); }
