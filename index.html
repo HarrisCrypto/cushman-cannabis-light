@@ -118,10 +118,13 @@ tailwind.config = { theme: { extend: {
 <body class="font-body overflow-x-hidden relative">
 
 <!-- ══════════ AGE GATE ══════════ -->
-<div id="ageGate" class="fixed inset-0 z-[120] flex items-center justify-center px-4" style="background:linear-gradient(180deg,#33582f 0%,#2e5233 55%,#203a24 100%)">
-  <svg viewBox="0 0 1440 210" preserveAspectRatio="none" class="absolute bottom-0 left-0 w-full h-[130px]" aria-hidden="true"><path d="M0,120 C240,70 420,140 720,105 C1020,70 1200,130 1440,95 L1440,210 L0,210 Z" fill="#7fae6d" opacity=".5"/><path d="M0,155 C260,105 520,175 820,140 C1080,112 1260,165 1440,135 L1440,210 L0,210 Z" fill="#4a7c43" opacity=".65"/><path d="M0,185 C300,140 620,205 940,172 C1150,152 1300,190 1440,168 L1440,210 L0,210 Z" fill="#203a24"/></svg>
-  <div class="glass-strong rounded-3xl max-w-md w-full p-8 md:p-10 text-center relative shadow-2xl">
-    <img src="logo.png" alt="Cushman Cannabis and Co. logo" class="h-24 w-24 mx-auto mb-5 rounded-full">
+<div id="ageGate" class="fixed inset-0 z-[120] flex items-center justify-center px-4 overflow-hidden" style="background:linear-gradient(180deg,#f7f2e2 0%,#f1ead3 55%,#e9e1c6 100%)">
+  <div class="absolute inset-0" aria-hidden="true">
+    <img src="hero-etching-a.webp" alt="" class="w-full h-full object-cover" style="object-position:50% 46%;opacity:.32">
+    <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(246,241,227,.74),rgba(246,241,227,.4) 45%,rgba(246,241,227,.68))"></div>
+  </div>
+  <div class="glass-strong rounded-3xl max-w-md w-full p-8 md:p-10 text-center relative" style="border:1px solid #ded2b4;box-shadow:0 0 0 5px rgba(255,253,244,.9),0 0 0 6.5px rgba(179,134,44,.6),0 34px 54px -28px rgba(32,48,30,.5)">
+    <img src="logo.png" alt="Cushman Cannabis and Co. logo" class="h-24 w-24 mx-auto mb-5 rounded-full" style="border:3px solid #fffdf4;box-shadow:0 0 0 1px #ded2b4,0 0 0 6px #f6f1e3,0 0 0 7.5px rgba(179,134,44,.7)">
     <div class="font-display text-3xl md:text-4xl font-bold tracking-wide">CUSHMAN</div>
     <div class="text-[.65rem] tracking-[.45em] text-gold mt-1 mb-6">CANNABIS &amp; COMPANY</div>
     <p class="text-sm text-[#46543f] leading-relaxed mb-2">This site features medical cannabis products.</p>
@@ -666,6 +669,7 @@ function cardHTML(p, idx){
 }
 
 const PER_SHELF = 8;
+const expandedShelves = new Set();
 function wireCards(scope){
   scope.querySelectorAll(".card").forEach(el => {
     el.addEventListener("click", () => openModal(+el.dataset.idx));
@@ -683,9 +687,9 @@ function render(){
       if(!items.length) return "";
       const cards = items.map((p,j) => {
         const h = cardHTML(p, p._i);
-        return j >= PER_SHELF ? h.replace('class="card ', 'class="card morec hidden ') : h;
+        return (j >= PER_SHELF && !expandedShelves.has(c.id)) ? h.replace('class="card ', 'class="card morec hidden ') : h;
       }).join("");
-      const btn = items.length > PER_SHELF ? `<div class="text-center mt-7"><button class="seemore pill rounded-full px-7 py-3 text-[.8rem] tracking-wide" data-seemore="${c.id}" data-n="${items.length}" data-label="${c.label}">See all ${items.length} ${c.label} ↓</button></div>` : "";
+      const btn = items.length > PER_SHELF ? `<div class="text-center mt-7"><button class="seemore pill rounded-full px-7 py-3 text-[.8rem] tracking-wide" data-seemore="${c.id}" data-n="${items.length}" data-label="${c.label}">${expandedShelves.has(c.id) ? "Show less ↑" : "See all " + items.length + " " + c.label + " ↓"}</button></div>` : "";
       return `<div class="shelf mb-14"><div class="flex items-end justify-between gap-4 mb-5"><h3 class="font-display text-2xl md:text-3xl font-semibold">${c.label}</h3><span class="text-[.68rem] tracking-[.22em] font-semibold" style="color:#8a6420">${items.length} PRODUCTS</span></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">${cards}</div>${btn}</div>`;
     }).join("");
     countEl.textContent = PRODUCTS.length + " PRODUCTS · " + PER_SHELF + " PER SHELF UP FRONT · TAX INCLUDED";
@@ -694,6 +698,7 @@ function render(){
     sectionsEl.querySelectorAll("[data-seemore]").forEach(b => b.addEventListener("click", () => {
       const extras = b.closest(".shelf").querySelectorAll(".morec");
       const opening = extras.length && extras[0].classList.contains("hidden");
+      if(opening) expandedShelves.add(b.dataset.seemore); else expandedShelves.delete(b.dataset.seemore);
       extras.forEach(x => x.classList.toggle("hidden", !opening));
       b.textContent = opening ? "Show less ↑" : "See all " + b.dataset.n + " " + b.dataset.label + " ↓";
     }));
@@ -716,7 +721,7 @@ function renderFilters(){
 }
 function renderTiles(){
   const descs = {flower:"Oklahoma-grown, hand-trimmed buds",prerolls:"Singles & the famous ounce bag",infused:"Diamond & hash-oil infused heat",vapes:"Live resin, rosin & diamond pods",concentrates:"Diamonds, shatter & cured resin",edibles:"Gummies, lozenges & nano pouches",wellness:"Fast-acting drinkable relief"};
-  const imgs = {flower:"cat-flower.jpg",prerolls:"img-preroll-1g.jpg",infused:"img-infused-co2-2g.jpg",vapes:"cat-vapes.jpg",concentrates:"cat-concentrates.jpg",edibles:"https://weedmaps.com/images/products/000/596/864/avatar/1714682324-wana-universal_hero-rec-watermelon_hybrid.png?auto=format&w=900",wellness:"cat-wellness.jpg"};
+  const imgs = {flower:"https://weedmaps.com/images/pictures/users/006/655/925/439424804_Tig_Ol_Bitties.JPG?auto=format&w=900",prerolls:"img-preroll-ounce-bag.jpg",infused:"https://weedmaps.com/images/pictures/users/006/655/925/443495020_CHERRY_POPPER_2PK.JPG?auto=format&w=900",vapes:"https://weedmaps.com/images/products/000/634/677/avatar/1757100723-5gjefesativa.jpg?auto=format&w=900",concentrates:"https://weedmaps.com/images/pictures/users/006/655/925/442676297_2g_cured_resin.JPG?auto=format&w=900",edibles:"https://weedmaps.com/images/products/000/596/864/avatar/1714682324-wana-universal_hero-rec-watermelon_hybrid.png?auto=format&w=900",wellness:"https://weedmaps.com/images/products/000/927/465/avatar/1760057680-nectar_watermelon_1000mg_country_cannabis.png?auto=format&w=900"};
   document.getElementById("tiles").innerHTML = CATS.slice(1).map(c => {
     const n = PRODUCTS.filter(p=>p.c===c.id).length;
     return `<button class="tile group text-left w-full" data-cat="${c.id}">
