@@ -73,6 +73,11 @@ tailwind.config = { theme: { extend: {
     @keyframes sprigSway{from{transform:rotate(-2.4deg)}to{transform:rotate(2.6deg)}}
     .speck{position:absolute;bottom:12%;border-radius:9999px;background:radial-gradient(circle,rgba(217,185,106,.95),rgba(217,185,106,0) 70%);animation:speckFloat ease-in-out infinite alternate;opacity:0}
     @keyframes speckFloat{0%{transform:translateY(0) translateX(0);opacity:0}25%{opacity:.85}100%{transform:translateY(-64px) translateX(14px);opacity:0}}
+    .sun-halo{animation:sunPulse 9s ease-in-out infinite alternate}
+    @keyframes sunPulse{from{opacity:.75}to{opacity:1}}
+    .wind-line{animation:windDrift 26s linear infinite}
+    .wind-line.w2{animation-duration:34s;animation-delay:-14s}
+    @keyframes windDrift{to{stroke-dashoffset:-330}}
   }
   /* ——— Bottom action bar ——— */
   #actionBar{position:fixed;inset-inline:0;bottom:0;z-index:75;transform:translateY(110%);transition:transform .9s cubic-bezier(.16,1,.3,1)}
@@ -151,22 +156,8 @@ tailwind.config = { theme: { extend: {
   </div>
 </header>
 
-<!-- ══════════ HERO — THE ROLLING HILLS, ALIVE ══════════ -->
-<section id="top" class="relative overflow-hidden" style="background:linear-gradient(180deg,#faf5e4 0%,#f5edd3 46%,#eef0da 78%,#e9edd6 100%)">
-  <!-- sun with slow-turning rays -->
-  <svg class="absolute pointer-events-none" style="right:6%;top:26px;width:230px;height:230px;opacity:.9" viewBox="0 0 400 400" aria-hidden="true">
-    <g class="sun-rays" stroke="#d9b96a" stroke-width="5" stroke-linecap="round" opacity=".55">
-      <line x1="200" y1="8" x2="200" y2="52"/><line x1="200" y1="348" x2="200" y2="392"/><line x1="8" y1="200" x2="52" y2="200"/><line x1="348" y1="200" x2="392" y2="200"/>
-      <line x1="64" y1="64" x2="95" y2="95"/><line x1="305" y1="305" x2="336" y2="336"/><line x1="336" y1="64" x2="305" y2="95"/><line x1="95" y1="305" x2="64" y2="336"/>
-    </g>
-    <circle cx="200" cy="200" r="86" fill="#e9cf8e"/>
-    <circle cx="200" cy="200" r="86" fill="none" stroke="#d9b96a" stroke-width="3"/>
-  </svg>
-  <!-- drifting clouds -->
-  <svg class="cloud" style="top:44px;width:190px;animation-duration:95s;animation-delay:-30s" viewBox="0 0 200 60" aria-hidden="true"><g fill="#fffdf4"><ellipse cx="55" cy="42" rx="42" ry="16"/><ellipse cx="100" cy="32" rx="48" ry="21"/><ellipse cx="148" cy="43" rx="38" ry="14"/></g></svg>
-  <svg class="cloud" style="top:110px;width:120px;animation-duration:130s;animation-delay:-85s;opacity:.6" viewBox="0 0 200 60" aria-hidden="true"><g fill="#fffdf4"><ellipse cx="55" cy="42" rx="42" ry="16"/><ellipse cx="100" cy="32" rx="48" ry="21"/><ellipse cx="148" cy="43" rx="38" ry="14"/></g></svg>
-  <svg class="cloud" style="top:16px;width:90px;animation-duration:75s;animation-delay:-55s;opacity:.5" viewBox="0 0 200 60" aria-hidden="true"><g fill="#fffdf4"><ellipse cx="55" cy="42" rx="42" ry="16"/><ellipse cx="100" cy="32" rx="48" ry="21"/><ellipse cx="148" cy="43" rx="38" ry="14"/></g></svg>
-
+<!-- ══════════ HERO — THE ROLLING HILLS, ENGRAVED PLATE ══════════ -->
+<section id="top" class="relative overflow-hidden" style="background:linear-gradient(180deg,#faf5e4 0%,#f6f0da 60%,#eef0da 100%)">
   <div class="relative max-w-7xl mx-auto px-5 md:px-8 pt-12 md:pt-16 grid lg:grid-cols-[1.12fr_.88fr] gap-10 items-center z-10">
     <div class="reveal">
       <div class="flex items-center gap-3 mb-4">
@@ -186,32 +177,112 @@ tailwind.config = { theme: { extend: {
       </div>
     </div>
     <div class="relative mx-auto w-[74%] max-w-[330px] reveal">
-      <div class="absolute inset-0 rounded-full" style="background:radial-gradient(circle at 50% 38%,#f3dfae,#e7cf8e 55%,transparent 72%)"></div>
-      <img src="logo.png" alt="Cushman Cannabis and Company badge — a leaf over rolling Oklahoma hills" class="relative w-full rounded-full shadow-2xl" style="border:6px solid #fffdf4;outline:1px solid #ded2b4">
+      <img src="logo.png" alt="Cushman Cannabis and Company badge — a leaf over rolling Oklahoma hills" class="relative w-full rounded-full" style="border:6px solid #fffdf4;box-shadow:0 0 0 1px #ded2b4,0 0 0 9px #f6f1e3,0 0 0 10.5px rgba(179,134,44,.75),0 30px 44px -18px rgba(32,48,30,.4)">
       <span class="stamp absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap" style="background:#fffdf4">Est. Cushing, Oklahoma</span>
     </div>
   </div>
 
-  <!-- the hills themselves -->
-  <div class="relative mt-8 md:mt-10 h-[168px] md:h-[215px]" aria-hidden="true">
-    <span class="speck" style="left:18%;width:9px;height:9px;animation-duration:8s;animation-delay:-2s"></span>
-    <span class="speck" style="left:34%;width:6px;height:6px;animation-duration:11s;animation-delay:-6s"></span>
-    <span class="speck" style="left:57%;width:8px;height:8px;animation-duration:9.5s;animation-delay:-4s"></span>
-    <span class="speck" style="left:72%;width:5px;height:5px;animation-duration:12s;animation-delay:-8s"></span>
-    <span class="speck" style="left:86%;width:7px;height:7px;animation-duration:10s;animation-delay:-1s"></span>
-    <svg class="hill hill-1" viewBox="0 0 1440 220" preserveAspectRatio="none" style="height:100%"><path d="M0,110 C240,58 420,132 720,96 C1020,60 1200,122 1440,86 L1440,220 L0,220 Z" fill="#c3d69c"/></svg>
-    <svg class="hill hill-2" viewBox="0 0 1440 220" preserveAspectRatio="none" style="height:100%"><path d="M0,140 C260,92 520,162 820,128 C1080,100 1260,152 1440,122 L1440,220 L0,220 Z" fill="#8fbc74"/></svg>
-    <svg class="hill hill-3" viewBox="0 0 1440 220" preserveAspectRatio="none" style="height:100%"><path d="M0,168 C300,126 620,192 940,158 C1150,138 1300,178 1440,154 L1440,220 L0,220 Z" fill="#4a7c43"/></svg>
-    <svg class="hill hill-4" viewBox="0 0 1440 220" preserveAspectRatio="none" style="height:100%">
-      <path d="M0,196 C300,158 620,214 940,184 C1150,166 1300,200 1440,180 L1440,220 L0,220 Z" fill="#2e5233"/>
-      <g fill="none" stroke="#7fae6d" stroke-width="3.5" stroke-linecap="round">
-        <path class="sprig" d="M180,206 q2,-16 -4,-26 M180,206 q8,-13 18,-18 M180,206 q-10,-11 -18,-13"/>
-        <path class="sprig s2" d="M470,212 q2,-16 -4,-26 M470,212 q8,-13 18,-18 M470,212 q-10,-11 -18,-13"/>
-        <path class="sprig s3" d="M760,204 q2,-16 -4,-26 M760,204 q8,-13 18,-18 M760,204 q-10,-11 -18,-13"/>
-        <path class="sprig s4" d="M1040,210 q2,-16 -4,-26 M1040,210 q8,-13 18,-18 M1040,210 q-10,-11 -18,-13"/>
-        <path class="sprig s5" d="M1290,202 q2,-16 -4,-26 M1290,202 q8,-13 18,-18 M1290,202 q-10,-11 -18,-13"/>
-      </g>
-    </svg>
+  <!-- the engraved plate -->
+  <div class="relative max-w-7xl mx-auto px-5 md:px-8 mt-10 md:mt-12 pb-12 md:pb-16 reveal">
+    <div class="relative overflow-hidden" style="border:1.5px solid rgba(46,82,51,.6);border-radius:4px;box-shadow:0 0 0 5px #f6f1e3,0 0 0 6.5px rgba(179,134,44,.65),0 34px 54px -30px rgba(32,48,30,.4);background:linear-gradient(180deg,#fbf7e9 0%,#f5eed6 58%,#eef0da 100%)">
+      <svg viewBox="0 0 1440 430" class="w-full block" role="img" aria-label="Engraved-style illustration of rolling Oklahoma hills, fields and a rising sun">
+        <defs>
+          <pattern id="hatchA" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(24)">
+            <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(46,82,51,.20)" stroke-width="1.1"/>
+          </pattern>
+          <pattern id="hatchB" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(32,48,30,.16)" stroke-width="1.1"/>
+          </pattern>
+          <pattern id="skyLines" width="6" height="9" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="1" x2="6" y2="1" stroke="rgba(46,82,51,.13)" stroke-width="1"/>
+          </pattern>
+          <radialGradient id="sunHalo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(217,185,106,.5)"/>
+            <stop offset="70%" stop-color="rgba(217,185,106,.14)"/>
+            <stop offset="100%" stop-color="rgba(217,185,106,0)"/>
+          </radialGradient>
+          <linearGradient id="skyFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity=".85"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+          </linearGradient>
+          <mask id="skyMask"><rect x="0" y="0" width="1440" height="185" fill="url(#skyFade)"/></mask>
+        </defs>
+
+        <!-- sky: fine horizontal engraving lines, fading down -->
+        <rect x="0" y="0" width="1440" height="185" fill="url(#skyLines)" mask="url(#skyMask)"/>
+
+        <!-- sun: concentric ink rings + short tick rays, woodcut style -->
+        <g>
+          <circle cx="1152" cy="118" r="108" fill="url(#sunHalo)" class="sun-halo"/>
+          <g stroke="#b3862c" stroke-width="3" stroke-linecap="round" opacity=".85">
+            <line x1="1152" y1="14" x2="1152" y2="30"/><line x1="1152" y1="206" x2="1152" y2="222"/>
+            <line x1="1048" y1="118" x2="1064" y2="118"/><line x1="1240" y1="118" x2="1256" y2="118"/>
+            <line x1="1078" y1="44" x2="1090" y2="56"/><line x1="1214" y1="180" x2="1226" y2="192"/>
+            <line x1="1226" y1="44" x2="1214" y2="56"/><line x1="1090" y1="180" x2="1078" y2="192"/>
+          </g>
+          <circle cx="1152" cy="118" r="64" fill="rgba(233,207,142,.35)" stroke="#b3862c" stroke-width="2.4"/>
+          <circle cx="1152" cy="118" r="52" fill="none" stroke="#b3862c" stroke-width="1.3" opacity=".8"/>
+          <circle cx="1152" cy="118" r="41" fill="none" stroke="#b3862c" stroke-width="1" opacity=".6"/>
+        </g>
+
+        <!-- birds -->
+        <g fill="none" stroke="#41523c" stroke-width="2.4" stroke-linecap="round" opacity=".75">
+          <path d="M330,84 q7,-7 14,0 q7,-7 14,0"/>
+          <path d="M392,116 q5,-5 10,0 q5,-5 10,0"/>
+          <path d="M262,128 q5,-5 10,0 q5,-5 10,0"/>
+        </g>
+
+        <!-- breeze lines: dotted engraved strokes drifting slowly -->
+        <g fill="none" stroke="rgba(46,82,51,.4)" stroke-width="2" stroke-linecap="round">
+          <path class="wind-line" stroke-dasharray="1.5 15" d="M-20,150 C260,128 520,168 820,142 C1050,124 1240,150 1470,128"/>
+          <path class="wind-line w2" stroke-dasharray="1.5 19" d="M-20,196 C300,176 620,210 940,186 C1140,172 1300,192 1470,176"/>
+        </g>
+
+        <!-- back hill -->
+        <path d="M-10,252 C210,196 430,262 720,228 C1010,196 1210,250 1450,214 L1450,430 L-10,430 Z" fill="rgba(190,209,160,.5)"/>
+        <path d="M-10,252 C210,196 430,262 720,228 C1010,196 1210,250 1450,214 L1450,430 L-10,430 Z" fill="url(#hatchA)"/>
+        <path d="M-10,252 C210,196 430,262 720,228 C1010,196 1210,250 1450,214" fill="none" stroke="#2e5233" stroke-width="2.2" stroke-linecap="round" opacity=".6"/>
+        <path d="M-10,276 C220,224 450,284 730,252 C1000,224 1200,272 1450,240" fill="none" stroke="rgba(46,82,51,.35)" stroke-width="1.4"/>
+        <path d="M-10,300 C240,252 470,306 740,278 C990,252 1190,294 1450,266" fill="none" stroke="rgba(46,82,51,.22)" stroke-width="1.2"/>
+
+        <!-- mid hill -->
+        <path d="M-10,308 C250,254 540,326 850,288 C1090,262 1260,312 1450,282 L1450,430 L-10,430 Z" fill="rgba(151,186,116,.45)"/>
+        <path d="M-10,308 C250,254 540,326 850,288 C1090,262 1260,312 1450,282 L1450,430 L-10,430 Z" fill="url(#hatchB)"/>
+        <path d="M-10,308 C250,254 540,326 850,288 C1090,262 1260,312 1450,282" fill="none" stroke="#2e5233" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>
+        <!-- tree line along the mid ridge: small clustered strokes -->
+        <path d="M120,296 l0,-11 M138,293 l0,-9 M155,292 l0,-12 M388,282 l0,-10 M406,281 l0,-8 M1030,276 l0,-11 M1048,275 l0,-9 M1066,276 l0,-12 M1240,282 l0,-9 M1257,284 l0,-11" stroke="#2e5233" stroke-width="2.6" stroke-linecap="round" opacity=".65"/>
+
+        <!-- front hill -->
+        <path d="M-10,362 C280,312 620,388 950,350 C1160,328 1300,368 1450,344 L1450,430 L-10,430 Z" fill="rgba(110,158,84,.5)"/>
+        <path d="M-10,362 C280,312 620,388 950,350 C1160,328 1300,368 1450,344 L1450,430 L-10,430 Z" fill="url(#hatchA)"/>
+        <path d="M-10,362 C280,312 620,388 950,350 C1160,328 1300,368 1450,344" fill="none" stroke="#244227" stroke-width="2.8" stroke-linecap="round" opacity=".85"/>
+        <!-- plowed field rows following the front hill -->
+        <g fill="none" stroke="rgba(32,48,30,.3)" stroke-width="2">
+          <path d="M60,392 C340,348 640,410 940,376 C1130,356 1270,388 1400,370"/>
+          <path d="M120,408 C380,368 660,424 930,394 C1110,375 1240,402 1360,386"/>
+          <path d="M220,422 C450,388 690,434 920,408 C1080,391 1190,412 1300,398"/>
+        </g>
+        <!-- fence line, front-left -->
+        <g stroke="#20301e" stroke-width="2.6" stroke-linecap="round" opacity=".72">
+          <path d="M96,378 L356,352" fill="none"/>
+          <path d="M100,390 L352,366" fill="none" opacity=".65"/>
+          <line x1="112" y1="362" x2="112" y2="392"/><line x1="172" y1="357" x2="172" y2="387"/>
+          <line x1="232" y1="353" x2="232" y2="383"/><line x1="292" y1="349" x2="292" y2="379"/>
+          <line x1="348" y1="345" x2="348" y2="373"/>
+        </g>
+        <!-- two hand-drawn trees -->
+        <g fill="none" stroke="#244227" stroke-linecap="round">
+          <path d="M1212,352 q3,-22 -2,-38 M1210,330 q-12,-6 -20,-16 M1211,326 q11,-8 14,-20" stroke-width="3.2"/>
+          <circle cx="1192" cy="298" r="17" stroke-width="2"/><circle cx="1216" cy="288" r="20" stroke-width="2"/>
+          <circle cx="1236" cy="302" r="14" stroke-width="2"/><circle cx="1214" cy="306" r="22" stroke-width="1.4" opacity=".6"/>
+          <path d="M1202,292 q8,-6 16,-2 M1206,308 q10,-4 18,0" stroke-width="1.4" opacity=".65"/>
+          <path d="M556,368 q2,-16 -1,-28 M555,352 q-9,-5 -14,-12 M555,349 q8,-6 10,-15" stroke-width="2.8"/>
+          <circle cx="542" cy="332" r="12" stroke-width="1.8"/><circle cx="558" cy="325" r="14" stroke-width="1.8"/>
+          <circle cx="570" cy="336" r="10" stroke-width="1.8"/><circle cx="556" cy="340" r="15" stroke-width="1.2" opacity=".6"/>
+        </g>
+      </svg>
+      <p class="absolute bottom-3 right-4 text-[.6rem] font-semibold uppercase" style="letter-spacing:.34em;color:rgba(46,82,51,.65)">The rolling hills of Cushing, Oklahoma</p>
+    </div>
   </div>
 </section>
 
