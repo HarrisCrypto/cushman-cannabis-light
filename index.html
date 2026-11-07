@@ -698,7 +698,7 @@ function render(){
         return (j >= front && !expandedShelves.has(c.id)) ? h.replace('class="card ', 'class="card morec hidden ') : h;
       }).join("");
       const btn = items.length > front ? `<div class="text-center mt-7"><button class="seemore pill rounded-full px-7 py-3 text-[.8rem] tracking-wide" data-seemore="${c.id}" data-n="${items.length}" data-label="${c.label}">${expandedShelves.has(c.id) ? "Show less ↑" : "See all " + items.length + " " + c.label + " ↓"}</button></div>` : "";
-      return `<div class="shelf mb-14"><div class="flex items-end justify-between gap-4 mb-5"><h3 class="font-display text-2xl md:text-3xl font-semibold">${c.label}</h3><span class="text-[.68rem] tracking-[.22em] font-semibold" style="color:#8a6420">${items.length} PRODUCTS</span></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">${cards}</div>${btn}</div>`;
+      return `<div class="shelf mb-14"><div class="flex items-end justify-between gap-4 mb-5"><h3 class="font-display text-2xl md:text-3xl font-semibold">${c.label}</h3><span class="text-[.68rem] tracking-[.22em] font-semibold" style="color:#8a6420">${items.length} PRODUCT${items.length===1?"":"S"}</span></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">${cards}</div>${btn}</div>`;
     }).join("");
     countEl.textContent = PRODUCTS.length + " PRODUCTS · TAX INCLUDED";
     emptyEl.classList.add("hidden");
@@ -737,7 +737,7 @@ function renderTiles(){
       <span class="block p-4 sm:p-5">
         <span class="flex items-start justify-between gap-2"><span class="font-display font-bold text-[1.05rem] leading-tight">${c.label}</span><span class="tile-arrow font-bold" style="color:#b3862c">→</span></span>
         <span class="block text-[.82rem] font-light mt-1 leading-snug" style="color:#5a6b52">${descs[c.id]}</span>
-        <span class="block text-[.62rem] tracking-[.22em] font-semibold mt-2.5" style="color:#8a6420">${n} PRODUCTS</span>
+        <span class="block text-[.62rem] tracking-[.22em] font-semibold mt-2.5" style="color:#8a6420">${n} PRODUCT${n===1?"":"S"}</span>
       </span>
     </button>`;
   }).join("");
