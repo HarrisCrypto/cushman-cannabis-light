@@ -996,6 +996,22 @@ renderFilters(); renderTiles(); render();
   }
   document.addEventListener("click", e => { if (e.target.closest && e.target.closest(".card,[data-seemore]")) setTimeout(() => considerNudge(0), 4000); });
   addEventListener("appinstalled", () => { hideNudge(); collapseBar(); });
+  const APP_VERSION = "20261107-0205";
+  async function checkFresh(){
+    try {
+      if (navigator.serviceWorker) { const reg = await navigator.serviceWorker.getRegistration(); if (reg) reg.update().catch(() => {}); }
+      const r = await fetch("version.json?ts=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) return;
+      const j = await r.json();
+      if (j && j.v && j.v !== APP_VERSION) {
+        const last = +(sessionStorage.getItem("cushReload") || 0);
+        if (Date.now() - last > 30000) { sessionStorage.setItem("cushReload", String(Date.now())); location.reload(); }
+      }
+    } catch(e) {}
+  }
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") checkFresh(); });
+  addEventListener("pageshow", e => { if (e.persisted) checkFresh(); });
+  setTimeout(checkFresh, 5000);
   function showSteps(html){ steps.innerHTML = html; card.classList.remove("hidden"); }
   if (btn) btn.addEventListener("click", async () => {
     if (await runPrompt()) return;
