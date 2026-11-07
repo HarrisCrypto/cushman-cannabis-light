@@ -312,6 +312,12 @@ tailwind.config = { theme: { extend: {
         <a href="https://www.google.com/maps/search/?api=1&query=Cushman+Cannabis+Company+217+West+Moses+Street+Cushing+OK+74023" target="_blank" rel="noopener" class="btn-forest rounded-full px-7 py-3.5 text-sm tracking-wide">Get Directions</a>
         <a href="https://weedmaps.com/dispensaries/cushman-cannabis-company" target="_blank" rel="noopener" class="btn-ghost rounded-full px-7 py-3.5 text-sm tracking-wide font-semibold">Order Ahead</a>
       </div>
+      <div class="mt-8">
+        <div class="rounded-3xl overflow-hidden" style="background:#fffdf4;border:1px solid #ded2b4;box-shadow:0 14px 30px -22px rgba(32,48,30,.35)">
+          <iframe title="Map — Cushman Cannabis & Company, 217 West Moses Street, Cushing, OK" src="https://www.google.com/maps?q=Cushman%20Cannabis%20Company%2C%20217%20West%20Moses%20Street%2C%20Cushing%2C%20OK%2074023&z=15&output=embed" class="w-full h-[240px] block" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <p class="text-[.68rem] tracking-[.18em] mt-3" style="color:#8a7a52">217 WEST MOSES STREET · CUSHING, OK 74023 — TAP THE MAP TO EXPLORE</p>
+      </div>
     </div>
     <div class="reveal md:col-span-3">
       <div class="rounded-3xl p-7 md:p-9" style="background:#fffdf4;border:1px solid #ded2b4;box-shadow:0 14px 30px -22px rgba(32,48,30,.35)">
@@ -328,12 +334,7 @@ tailwind.config = { theme: { extend: {
         <p id="openStatus" class="mt-6 text-sm font-semibold" style="color:#2e5233"></p>
       </div>
     </div>
-  <div class="reveal md:col-span-5">
-      <div class="rounded-3xl overflow-hidden" style="background:#fffdf4;border:1px solid #ded2b4;box-shadow:0 14px 30px -22px rgba(32,48,30,.35)">
-        <iframe title="Map — Cushman Cannabis & Company, 217 West Moses Street, Cushing, OK" src="https://www.google.com/maps?q=Cushman%20Cannabis%20Company%2C%20217%20West%20Moses%20Street%2C%20Cushing%2C%20OK%2074023&z=15&output=embed" class="w-full h-[320px] md:h-[380px] block" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-      <p class="text-[.72rem] tracking-[.18em] mt-4" style="color:#8a7a52">217 WEST MOSES STREET · CUSHING, OK 74023 — TAP THE MAP TO EXPLORE, OR HIT GET DIRECTIONS ABOVE</p>
-    </div>
+  
     </div>
 </section>
 
@@ -683,16 +684,23 @@ function render(){
   if(activeCat==="all" && !q){
     grid.classList.add("hidden"); sectionsEl.classList.remove("hidden");
     sectionsEl.innerHTML = CATS.slice(1).map(c => {
-      const items = all.filter(p => p.c===c.id);
+      let items = all.filter(p => p.c===c.id);
       if(!items.length) return "";
+      let front = PER_SHELF;
+      if(c.id === "concentrates"){
+        const withPic = items.filter(p => p.i && p.i.startsWith("http"));
+        const noPic = items.filter(p => !(p.i && p.i.startsWith("http")));
+        items = [...withPic, ...noPic];
+        front = withPic.length || PER_SHELF;
+      }
       const cards = items.map((p,j) => {
         const h = cardHTML(p, p._i);
-        return (j >= PER_SHELF && !expandedShelves.has(c.id)) ? h.replace('class="card ', 'class="card morec hidden ') : h;
+        return (j >= front && !expandedShelves.has(c.id)) ? h.replace('class="card ', 'class="card morec hidden ') : h;
       }).join("");
-      const btn = items.length > PER_SHELF ? `<div class="text-center mt-7"><button class="seemore pill rounded-full px-7 py-3 text-[.8rem] tracking-wide" data-seemore="${c.id}" data-n="${items.length}" data-label="${c.label}">${expandedShelves.has(c.id) ? "Show less ↑" : "See all " + items.length + " " + c.label + " ↓"}</button></div>` : "";
+      const btn = items.length > front ? `<div class="text-center mt-7"><button class="seemore pill rounded-full px-7 py-3 text-[.8rem] tracking-wide" data-seemore="${c.id}" data-n="${items.length}" data-label="${c.label}">${expandedShelves.has(c.id) ? "Show less ↑" : "See all " + items.length + " " + c.label + " ↓"}</button></div>` : "";
       return `<div class="shelf mb-14"><div class="flex items-end justify-between gap-4 mb-5"><h3 class="font-display text-2xl md:text-3xl font-semibold">${c.label}</h3><span class="text-[.68rem] tracking-[.22em] font-semibold" style="color:#8a6420">${items.length} PRODUCTS</span></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">${cards}</div>${btn}</div>`;
     }).join("");
-    countEl.textContent = PRODUCTS.length + " PRODUCTS · " + PER_SHELF + " PER SHELF UP FRONT · TAX INCLUDED";
+    countEl.textContent = PRODUCTS.length + " PRODUCTS · TAX INCLUDED";
     emptyEl.classList.add("hidden");
     wireCards(sectionsEl);
     sectionsEl.querySelectorAll("[data-seemore]").forEach(b => b.addEventListener("click", () => {
