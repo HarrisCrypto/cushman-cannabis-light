@@ -83,7 +83,7 @@ tailwind.config = { theme: { extend: {
   #actionBar{position:fixed;inset-inline:0;bottom:0;z-index:75;transform:translateY(110%) translateZ(0);-webkit-transform:translateY(110%) translateZ(0);transition:transform .45s cubic-bezier(.16,1,.3,1);will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
   #actionBar.show{transform:translateY(0) translateZ(0);-webkit-transform:translateY(0) translateZ(0)}
   .card{scroll-margin-top:110px}
-  .bar-link{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px calc(10px + env(safe-area-inset-bottom));font-size:.64rem;letter-spacing:.16em;color:#41523c;transition:.25s}
+  .bar-link{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;padding:10px 4px calc(10px + env(safe-area-inset-bottom));font-size:.64rem;letter-spacing:.16em;color:#41523c;transition:.25s}
   .bar-link:hover{color:#2e5233}
   .bar-link svg{color:#b3862c}
   /* ——— Budtender Sage chat widget (light) ——— */
@@ -106,6 +106,12 @@ tailwind.config = { theme: { extend: {
   .msg-user{background:#2e5233;color:#fdf9ec}
   #ageGate{transition:opacity .5s}
   .hrow-today{font-weight:800;color:#2e5233}
+  /* ——— UX plan Nov 21: sticky menu toolbar, spec chips, deals strip ——— */
+  #toolbar{position:sticky;top:72px;z-index:60;background:rgba(246,241,227,.97);backdrop-filter:blur(8px);border-bottom:1px solid #ded2b4;margin:0 -1.25rem;padding:.7rem 1.25rem .45rem}
+  @media(min-width:768px){#toolbar{margin:0 -2rem;padding:.7rem 2rem .45rem}}
+  .spec{display:inline-flex;align-items:center;border:1.5px solid #b3862c;background:rgba(179,134,44,.14);color:#6d4d13;font-weight:600;font-size:.74rem;letter-spacing:.05em;border-radius:999px;padding:.3rem .72rem}
+  .spec.thc{border-color:rgba(74,124,67,.65);background:rgba(74,124,67,.13);color:#2e5233}
+  .dealcard{scroll-snap-align:start}
 </style>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#2e5233">
@@ -229,9 +235,27 @@ tailwind.config = { theme: { extend: {
   </div>
 </section>
 
+<!-- ══════════ DEALS — strip above the menu (UX plan item 2) ══════════ -->
+<section id="deals" style="background:linear-gradient(180deg,#eef0da,#e6ebcf);border-top:1px solid #ded2b4;border-bottom:1px solid #ded2b4">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-10">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="h-px w-10" style="background:#b3862c"></span>
+          <span class="text-[.65rem] tracking-[.4em] font-bold" style="color:#8a6420">THIS WEEK AT CUSHMAN</span>
+        </div>
+        <h2 class="font-display text-3xl md:text-4xl font-semibold">Deals &amp; <span class="gold-text">Savings</span></h2>
+      </div>
+      <div class="rounded-full px-5 py-2.5 text-[.8rem] font-semibold tracking-wide" style="background:#2e5233;color:#fdf9ec">NEW PATIENTS · 10% OFF YOUR FIRST ORDER</div>
+    </div>
+    <div id="dealRow" class="flex gap-4 overflow-x-auto pb-3" style="scroll-snap-type:x mandatory"></div>
+    <p class="text-[.7rem] tracking-[.16em] mt-1" style="color:#5a6b52">EVERY DEAL BELOW IS LIVE ON THE MENU — TAP ONE TO OPEN IT</p>
+  </div>
+</section>
+
 <!-- ══════════ MENU ══════════ -->
 <section id="menu" class="max-w-7xl mx-auto px-5 md:px-8 pt-24 md:pt-28 pb-8 scroll-mt-24">
-  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-9">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-5">
     <div class="reveal">
       <div class="flex items-center gap-3 mb-4">
         <span class="h-px w-10" style="background:#b3862c"></span>
@@ -240,22 +264,25 @@ tailwind.config = { theme: { extend: {
       <h2 class="font-display text-4xl md:text-5xl font-semibold">Shop the <span class="gold-text">Collection</span></h2>
       <p class="mt-4 max-w-xl font-light leading-relaxed" style="color:#5a6b52">Every product below is live on our Weedmaps menu right now. Tap any item for the full story, then order ahead for pickup.</p>
     </div>
-    <div class="relative w-full md:w-80 shrink-0 reveal">
+  </div>
+  <!-- Search + filters + sort gathered into one sticky toolbar (UX plan item 3) -->
+  <div id="toolbar" class="reveal">
+    <div class="relative w-full md:max-w-md mb-3">
       <svg class="absolute left-4 top-1/2 -translate-y-1/2" style="color:#8a7a52" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input id="search" type="text" placeholder="Search strains, brands, flavors…" class="w-full rounded-full py-3.5 pl-11 pr-5 text-sm focus:outline-none" style="background:#fffdf4;border:1.5px solid #cfc09a;color:#20301e">
     </div>
-  </div>
-  <div id="filters" class="reveal flex flex-wrap gap-2.5 mb-4"></div>
-  <div class="reveal flex flex-wrap items-center gap-2.5 mb-4">
-    <label for="sortBy" class="text-[.65rem] tracking-[.25em] font-semibold" style="color:#8a7a52">SORT BY</label>
-    <select id="sortBy" class="rounded-full py-2.5 pl-4 pr-4 text-[.8rem] tracking-wide focus:outline-none cursor-pointer" style="background:#fffdf4;border:1.5px solid #cfc09a;color:#20301e">
-      <option value="featured">Featured</option>
-      <option value="price-asc">Price: Low to High</option>
-      <option value="price-desc">Price: High to Low</option>
-      <option value="name-asc">Name: A to Z</option>
-      <option value="name-desc">Name: Z to A</option>
-    </select>
-    <button id="saleToggle" class="pill rounded-full px-5 py-2.5 text-[.8rem] tracking-wide" type="button">On Sale <span id="saleCount" class="opacity-60 text-xs"></span></button>
+    <div id="filters" class="flex flex-wrap gap-2.5 mb-3"></div>
+    <div class="flex flex-wrap items-center gap-2.5">
+      <label for="sortBy" class="text-[.65rem] tracking-[.25em] font-semibold" style="color:#8a7a52">SORT BY</label>
+      <select id="sortBy" class="rounded-full py-2.5 pl-4 pr-4 text-[.8rem] tracking-wide focus:outline-none cursor-pointer" style="background:#fffdf4;border:1.5px solid #cfc09a;color:#20301e">
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name-asc">Name: A to Z</option>
+        <option value="name-desc">Name: Z to A</option>
+      </select>
+      <button id="saleToggle" class="pill rounded-full px-5 py-2.5 text-[.8rem] tracking-wide" type="button">On Sale <span id="saleCount" class="opacity-60 text-xs"></span></button>
+    </div>
   </div>
   <p id="resultCount" class="text-[.72rem] tracking-[.2em] mb-8" style="color:#8a7a52"></p>
   <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
@@ -645,9 +672,12 @@ function imgBlock(p, h){
 window.__ph = `<div class="ph-art absolute inset-0 flex flex-col items-center justify-center gap-2">${leafSVG}<span class="font-display tracking-[.25em] text-[.6rem]" style="color:rgba(46,82,51,.65)">CUSHMAN</span></div>`;
 
 function cardHTML(p, idx){
-  const badges = [p.s ? `<span class="badge">${p.s}</span>` : "", p.t ? `<span class="badge thc">${p.t}</span>` : ""].join("");
+  /* UX plan item 7: size + THC promoted to a bold spec row; sale % on the photo; per-gram context */
+  const badges = [p.s ? `<span class="spec">${p.s}</span>` : "", p.t ? `<span class="spec thc">${p.t}</span>` : ""].join("");
   const was = p.w ? `<span class="line-through text-sm mr-2" style="color:#8a7a52">${money(p.w)}</span>` : "";
-  const sale = p.w ? `<span class="absolute top-3 right-3 badge" style="background:rgba(74,124,67,.16);border-color:rgba(74,124,67,.55);color:#2e5233">SALE</span>` : "";
+  const sale = p.w ? `<span class="absolute top-3 right-3 badge" style="background:#b3862c;border-color:#b3862c;color:#fff">SALE · SAVE ${Math.round((1 - p.p/p.w) * 100)}%</span>` : "";
+  const gm = /^([\d.]+)\s*g$/i.exec(p.s || "");
+  const perUnit = gm ? `<div class="text-[.72rem] mt-1 font-medium" style="color:#8a6420">${money(p.p / parseFloat(gm[1]))} per gram</div>` : "";
   return `<article class="card rounded-3xl cursor-pointer" data-idx="${idx}" tabindex="0" role="button" aria-label="${p.n.replace(/"/g,'&quot;')}">
     <div class="relative">${imgBlock(p,"h-52")}${sale}</div>
     <div class="p-5">
@@ -656,9 +686,9 @@ function cardHTML(p, idx){
         <span class="text-[.62rem] tracking-[.18em] uppercase" style="color:#8a7a52">${CATLABEL[p.c]}</span>
       </div>
       <h3 class="font-medium leading-snug text-[.98rem] min-h-[2.6em]">${p.n}</h3>
-      <div class="flex flex-wrap gap-1.5 mt-3">${badges}</div>
+      <div class="flex flex-wrap gap-2 mt-3">${badges}</div>
       <div class="flex items-end justify-between mt-4">
-        <div>${was}<span class="font-display text-xl font-semibold" style="color:#2e5233">${money(p.p)}</span></div>
+        <div>${was}<span class="font-display text-xl font-semibold" style="color:#2e5233">${money(p.p)}</span>${perUnit}</div>
         <span class="text-[.7rem] tracking-[.14em]" style="color:#5a6b52">DETAILS →</span>
       </div>
     </div>
@@ -816,6 +846,28 @@ document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 })();
 
 renderFilters(); renderTiles(); render();
+</script>
+
+<script>
+/* ——— Populate the deals strip from the live PRODUCTS data (UX plan item 2) ——— */
+(function(){
+  const row = document.getElementById("dealRow");
+  if(!row || typeof PRODUCTS === "undefined") return;
+  const fmt = n => "$" + n.toFixed(2);
+  row.innerHTML = PRODUCTS.map((p,i)=>({...p,_i:i})).filter(p=>p.w).map(p=>{
+    const save = Math.round((1 - p.p/p.w) * 100);
+    const src = (typeof imgSrc !== "undefined" && imgSrc(p)) || (typeof phSrc !== "undefined" && phSrc(p)) || "";
+    return `<article class="dealcard card rounded-3xl cursor-pointer shrink-0" data-idx="${p._i}" style="width:228px">
+      <div class="relative"><div class="relative h-32 overflow-hidden" style="background:#dfe7cf"><img src="${src}" alt="" loading="lazy" class="pimg w-full h-full object-cover"></div>
+      <span class="absolute top-3 right-3 badge" style="background:#b3862c;border-color:#b3862c;color:#fff">SAVE ${save}%</span></div>
+      <div class="p-4">
+        <div class="text-[.6rem] tracking-[.22em] uppercase font-semibold mb-1" style="color:#8a6420">${p.b || ""}</div>
+        <h3 class="font-medium leading-snug text-[.9rem] min-h-[2.5em]">${p.n}</h3>
+        <div class="mt-2"><span class="line-through text-sm mr-2" style="color:#8a7a52">${fmt(p.w)}</span><span class="font-display text-lg font-semibold" style="color:#2e5233">${fmt(p.p)}</span></div>
+      </div></article>`;
+  }).join("");
+  row.querySelectorAll(".dealcard").forEach(el => el.addEventListener("click", () => { if(typeof openModal !== "undefined") openModal(+el.dataset.idx); }));
+})();
 </script>
 
 <script>
@@ -998,7 +1050,7 @@ renderFilters(); renderTiles(); render();
   }
   document.addEventListener("click", e => { if (e.target.closest && e.target.closest(".card,[data-seemore]")) setTimeout(() => considerNudge(0), 4000); });
   addEventListener("appinstalled", () => { hideNudge(); collapseBar(); });
-  const APP_VERSION = "20261116-1029";
+  const APP_VERSION = "20261121-1407";
   async function checkFresh(){
     try {
       if (navigator.serviceWorker) { const reg = await navigator.serviceWorker.getRegistration(); if (reg) reg.update().catch(() => {}); }
